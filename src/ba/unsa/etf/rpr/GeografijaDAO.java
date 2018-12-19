@@ -10,7 +10,6 @@ public class GeografijaDAO {
     private Connection konekcija;
     private String url;
     private Statement stmt;
-    private ResultSet result;
     private PreparedStatement ps;
     private PreparedStatement brisi;
 
@@ -21,7 +20,7 @@ public class GeografijaDAO {
     private GeografijaDAO() throws SQLException {
         konekcija = DriverManager.getConnection("jdbc:sqlite:baza");
         Statement stmt = konekcija.createStatement();
-        //ps = konekcija.prepareStatement("SELECT g.naziv FROM drzava d, grad g WHERE d.glavni_grad = ?");
+        ps = konekcija.prepareStatement("SELECT g.naziv FROM drzava d, grad g WHERE d.glavni_grad = ?");
         //brisi = konekcija.prepareStatement("DELETE FROM drzava d, grad g WHERE drzava = ? AND d.id = g.drzava");
     }
 
@@ -30,20 +29,23 @@ public class GeografijaDAO {
         return instance;
     }
 
-    public static void removeInstance() {
+    public static void removeInstance()
+    {
         instance = null;
     }
 
+
     Grad glavniGrad(String drzavica) throws SQLException, NullPointerException {
-        //ps.setString(1, drzava);
-        //result = ps.executeQuery();
-        Statement stmt = konekcija.createStatement();
-        String upit = "SELECT g.naziv FROM drzava d, grad g WHERE d.naziv = "+ "'" + drzavica + "'" +" AND g.id = d.glavni_grad";
-        ResultSet result = stmt.executeQuery(upit);
-        Grad grad1 = new Grad();
-        if (!result.next()) return null;
-        grad1.setNaziv(result.getString(1));
-        return grad1;
+        Grad grad = new Grad();
+        stmt = konekcija.createStatement();
+        ps.setString(1, drzavica);
+        ResultSet result = ps.executeQuery();
+        while( result.next()) {
+            grad.setId(result.getInt(1));
+            grad.setNaziv(result.getString(2));
+            grad.setBrojStanovnika(3);
+        }
+        return grad;
     }
 
     void obrisiDrzavu(String drzavica) throws SQLException {
