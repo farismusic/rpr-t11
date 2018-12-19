@@ -6,10 +6,15 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+
             GeografijaDAO dao = GeografijaDAO.getInstance();
-            //Grad nepoznat = dao.glavniGrad("Bosna i Hercegovina");
-            String bech = dao.glavniGrad("Austrija");
-            System.out.println(bech);
+            Drzava francuska = dao.nadjiDrzavu("Francuska");
+            Grad grad = new Grad();
+            grad.setNaziv("Marseille");
+            grad.setBrojStanovnika(869815);
+            grad.setDrzava(francuska);
+            dao.dodajGrad(grad);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }catch (NullPointerException e){
