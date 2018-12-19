@@ -1,8 +1,6 @@
 package ba.unsa.etf.rpr;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Main {
 
@@ -13,7 +11,9 @@ public class Main {
             String bech = dao.glavniGrad("Austrija");
             System.out.println(bech);
         } catch (SQLException e) {
-            System.out.println("nema");
+            e.printStackTrace();
+        }catch (NullPointerException e){
+            System.out.println("greska");
         }
     }
 }

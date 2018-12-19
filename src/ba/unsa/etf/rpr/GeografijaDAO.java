@@ -2,7 +2,6 @@ package ba.unsa.etf.rpr;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import static sun.management.jmxremote.ConnectorBootstrap.initialize;
 
@@ -35,13 +34,15 @@ public class GeografijaDAO {
         instance = null;
     }
 
-    String glavniGrad(String drzava) throws SQLException {
+    String glavniGrad(String drzavica) throws SQLException, NullPointerException {
         //ps.setString(1, drzava);
         //result = ps.executeQuery();
-        ResultSet result = stmt.executeQuery("SELECT g.naziv FROM drzava d, grad g WHERE d.glavni_grad = g.id");
-        Grad grad = new Grad();
+        Statement stmt = konekcija.createStatement();
+        String upit = "SELECT g.naziv FROM drzava d, grad g WHERE d.naziv = "+ "'" + drzavica + "'" +" AND g.id = d.glavni_grad";
+        ResultSet result = stmt.executeQuery(upit);
+        Grad grad1 = new Grad();
         //if (!result.next()) return null;
-        grad.setGlavni(result.getString(1));
+        //grad1.setGlavni(result.getString(2));
         return result.getString(1);
     }
 
