@@ -8,16 +8,12 @@ public class Main {
         try {
 
             GeografijaDAO dao = GeografijaDAO.getInstance();
-            Drzava francuska = dao.nadjiDrzavu("Francuska");
-            Grad grad = new Grad();
-            grad.setNaziv("Marseille");
-            grad.setBrojStanovnika(869815);
-            grad.setDrzava(francuska);
-            dao.dodajGrad(grad);
+            Grad nepoznat = dao.glavniGrad("Bosna i Hercegovina");
+            Grad bech = dao.glavniGrad("Austrija");
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("greska");
         }
     }
