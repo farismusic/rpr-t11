@@ -3,7 +3,6 @@ package ba.unsa.etf.rpr;
 import java.sql.*;
 import java.util.ArrayList;
 
-import static sun.management.jmxremote.ConnectorBootstrap.initialize;
 
 public class GeografijaDAO {
     private static GeografijaDAO instance = null;
