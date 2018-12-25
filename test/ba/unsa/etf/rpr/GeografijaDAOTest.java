@@ -1,13 +1,13 @@
 package ba.unsa.etf.rpr;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class GeografijaDAOTest {
 
@@ -24,15 +24,21 @@ class GeografijaDAOTest {
 
     @Test
     void glavniGrad() throws SQLException {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
-        //Grad nepoznat = dao.glavniGrad("Bosna i Hercegovina");
-        //assertNull(nepoznat);
+        Grad nepoznat = dao.glavniGrad("Bosna i Hercegovina");
+        assertNull(nepoznat);
         Grad bech = dao.glavniGrad("Austrija");
         assertEquals("Beč", bech.getNaziv());
     }
 
     @Test
     void obrisiDrzavu() throws SQLException {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
         // Nepostojeća država, neće se desiti ništa
         dao.obrisiDrzavu("Kina");
@@ -43,6 +49,9 @@ class GeografijaDAOTest {
 
     @Test
     void obrisiDrzavu2() throws SQLException {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
 
         // Nema gradova Beč i Graz koji su iz austrije
@@ -57,6 +66,9 @@ class GeografijaDAOTest {
 
     @Test
     void dodajGrad() throws SQLException {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
         Drzava francuska = dao.nadjiDrzavu("Francuska");
         Grad grad = new Grad();
@@ -72,11 +84,14 @@ class GeografijaDAOTest {
 
     @Test
     void dodajDrzavu() throws SQLException {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         Grad sarajevo = new Grad();
         sarajevo.setNaziv("Sarajevo");
         sarajevo.setBrojStanovnika(500000);
         Drzava bih = new Drzava();
-        sarajevo.setNaziv();
+        bih.setNaziv("Bosna i Hercegovina");
         bih.setGlavniGrad(sarajevo);
         sarajevo.setDrzava(bih);
 
@@ -93,6 +108,9 @@ class GeografijaDAOTest {
 
     @Test
     void izmijeniGrad() throws SQLException {
+        GeografijaDAO.removeInstance();
+        File dbfile = new File("baza.db");
+        dbfile.delete();
         GeografijaDAO dao = GeografijaDAO.getInstance();
         Grad bech = dao.glavniGrad("Austrija");
         bech.setNaziv("Vienna");
