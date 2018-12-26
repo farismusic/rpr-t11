@@ -1,5 +1,8 @@
 package ba.unsa.etf.rpr;
 
+import javafx.event.ActionEvent;
+import net.sf.jasperreports.engine.JRException;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -18,8 +21,8 @@ public class GeografijaDAO {
 
     private GeografijaDAO() throws SQLException {
         konekcija = DriverManager.getConnection("jdbc:sqlite:baza");
-        Statement stmt = konekcija.createStatement();
-        ps = konekcija.prepareStatement("SELECT g.naziv FROM drzava d, grad g WHERE d.glavni_grad = ?");
+        Statement stmt = getKonekcija().createStatement();
+        ps = getKonekcija().prepareStatement("SELECT g.naziv FROM drzava d, grad g WHERE d.glavni_grad = ?");
         //brisi = konekcija.prepareStatement("DELETE FROM drzava d, grad g WHERE drzava = ? AND d.id = g.drzava");
     }
 
@@ -36,7 +39,7 @@ public class GeografijaDAO {
 
     Grad glavniGrad(String drzavica) throws SQLException, NullPointerException {
         Grad grad = new Grad();
-        stmt = konekcija.createStatement();
+        stmt = getKonekcija().createStatement();
         ps.setString(1, drzavica);
         ResultSet result = ps.executeQuery();
         while( result.next()) {
@@ -48,14 +51,14 @@ public class GeografijaDAO {
     }
 
     void obrisiDrzavu(String drzavica) throws SQLException {
-        Statement stmt = konekcija.createStatement();
+        Statement stmt = getKonekcija().createStatement();
         String upit = "DELETE FROM drzava d, grad g WHERE drzava = " + "'" + drzavica + "'" + "AND d.id = g.drzava";
         ResultSet result = stmt.executeQuery(upit);
     }
 
     ArrayList<Grad> gradovi() throws SQLException {
         ArrayList<Grad> gradovi = new ArrayList<>();
-        Statement stmt = konekcija.createStatement();
+        Statement stmt = getKonekcija().createStatement();
         String upit = "SELECT naziv FROM grad";
         ResultSet result = stmt.executeQuery(upit);
         while(result.next()){
@@ -68,19 +71,19 @@ public class GeografijaDAO {
 
 
     public void dodajDrzavu(Drzava bih) throws SQLException {
-        Statement stmt = konekcija.createStatement();
+        Statement stmt = getKonekcija().createStatement();
         String upit = "insert into drzava (id, naziv, glavni_grad) values (" + bih.getId() + "," + " '" + bih.getNaziv() + "' ," + bih.getGlavniGrad().getId() + ")";
         ResultSet result = stmt.executeQuery(upit);
     }
 
     public void dodajGrad(Grad sarajevo) throws SQLException {
-        Statement stmt = konekcija.createStatement();
+        Statement stmt = getKonekcija().createStatement();
         String upit = "INSERT INTO grad(id, naziv, broj_stanovnika, drzava) VALUES (" + sarajevo.getId() + "," + sarajevo.getNaziv() + "," + sarajevo.getBrojStanovnika() + "," + sarajevo.getDrzava().getId() + ")";
         ResultSet result = stmt.executeQuery(upit);
     }
 
     public Drzava nadjiDrzavu(String francuska) throws SQLException {
-        Statement stmt = konekcija.createStatement();
+        Statement stmt = getKonekcija().createStatement();
         String upit = "SELECT * FROM drzava WHERE naziv = "+ "'" + francuska + "'";
         ResultSet result = stmt.executeQuery(upit);
         if(!result.next()) return null;
@@ -91,7 +94,23 @@ public class GeografijaDAO {
     }
 
     public void izmijeniGrad(Grad bech) throws SQLException {
-        Statement stmt = konekcija.createStatement();
+        Statement stmt = getKonekcija().createStatement();
         String upit1 = "SELECT naziv FROM grad";
+    }
+
+    public Connection getKonekcija() {
+        return konekcija;
+    }
+
+    public void stampajGradove(ActionEvent actionEvent) {
+        try {
+            new GradoviReport().showReport(instance.getConn());
+        } catch (JRException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    private Connection getConn() {
+        return konekcija;
     }
 }

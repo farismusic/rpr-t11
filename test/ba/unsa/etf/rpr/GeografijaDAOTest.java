@@ -57,6 +57,7 @@ class GeografijaDAOTest {
         // Nema gradova Beč i Graz koji su iz austrije
         dao.obrisiDrzavu("Austrija");
 
+
         ArrayList<Grad> gradovi = dao.gradovi();
         assertEquals(3, gradovi.size());
         assertEquals("London", gradovi.get(0).getNaziv());
