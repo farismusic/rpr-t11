@@ -19,6 +19,10 @@ public class GeografijaDAO {
         instance = new GeografijaDAO();
     }
 
+    public GeografijaDAO(GeografijaDAO hehe){
+        instance = hehe;
+    }
+
     private GeografijaDAO() throws SQLException {
         konekcija = DriverManager.getConnection("jdbc:sqlite:baza");
         Statement stmt = getKonekcija().createStatement();
